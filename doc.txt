@@ -1,0 +1,112 @@
+Admin:
+U: 23111
+P: admin@123
+
+RESTFull APIs 
+Act as a translator between 2 machines communicating over web services.
+Returns json files
+
+
+DRF
+Used for developing RESTFull APIs
+It has a web browsable web API 
+It has authentication policies
+
+
+Models - Tables for the DB
+View - Functions for URLs
+URL - URLs for View Functions
+
+Serializers: 
+Before sending data to client we need to serialize it to json & APIs and results is always json.
+Similar as Django forms (forms.py)
+When you define a Serializer, you need to specify all fields from the models.
+
+>>> from api.models import Sample
+>>> from api.serializers import SampleSerializer
+>>> from rest_framework.renderers import JSONRenderer
+>>> from rest_framework.parsers import JSONParser 
+>>> a = Sample(title = 'Test1', email='test@gmail.com') 
+>>> a.save()
+
+when we call above save(), it is calling create method
+
+>>> serializer = SampleSerializer(a)                     
+>>> serializer.data # it is a dictionary
+{'title': 'Test2', 'email': 'test2@gmail.com', 'date': '2022-02-15T04:49:17.543676Z'}
+
+Now at this point we have translated the models and its instances into python native datatype.
+Now to finalise the serialization process, we need to render this data into json.
+
+>>> content = JSONRenderer().render(serializer.data)
+>>> content
+b'{"title":"Test2","email":"test2@gmail.com","date":"2022-02-15T04:49:17.543676Z"}'
+
+We have got the serialized data.
+
+Now to seralize a queryset,
+
+>>> serializer = SampleSerializer(Sample.objects.all(), many=True)
+>>> serializer.data
+[OrderedDict([('title', 'Test1'), ('email', 'test@gmail.com'), ('date', '2022-02-15T04:49:07.267703Z')]), OrderedDict([('title', 'Test2'), ('email', 'test2@gmail.com'), ('date', '2022-02-15T04:49:17.543676Z')])]
+
+We have got the serialized data of the queryset.
+
+
+ModelSerializers:
+Our SnippetSerializer class is replicating a lot of information that's also contained in the Snippet model. 
+It would be nice if we could keep our code a bit more concise.
+
+In the same way that Django provides both Form classes and ModelForm classes, REST framework includes both Serializer classes, 
+and ModelSerializer classes.
+
+repr() = representation of.
+
+>>> serializer = SampleSerializer()
+>>> print(repr(serializer)) 
+SampleSerializer():
+    title = CharField(max_length=100)
+    email = EmailField(max_length=100)
+    date = DateTimeField()
+
+Status:
+200 = Ok
+201 = created
+400 = bad request
+403 = Forbidden
+404 = not found
+204 = Delete / no content
+
+Function based API views
+
+api_view() decorator in Function based API views 
+it used to ensure it receives an instance of request rather than usual Django Http request.
+also it allows to return a response rather than usual Django Http response.
+also you can access to django web browsable API view.
+
+Now we dont need to 
+1.return Json response, we will return rest_framework response
+2.parse the data from post/put method ( remove "data = JSONParser().parse(request)" )
+
+introduced to:
+from rest_framework.response import Response
+from rest_framework import status
+
+
+Class based API Views:
+This is a powerful pattern that allows us to reuse common functionalities.
+Also it helps as to keep our code DRY (Dont repeat yourself)
+Requests passed to the handler methods will be REST framework's Request instances, not Django's HttpRequest instances.
+Handler methods may return REST framework's Response, instead of Django's HttpResponse. The view will manage content 
+negotiation and setting the correct renderer on the response.
+
+
+Generic Views:
+The generic views provided by REST framework allow you to quickly build API views that map closely to your database models.
+If the generic views don't suit the needs of your API, you can drop down to using the regular APIView class, or reuse 
+the mixins and base classes used by the generic views to compose your own set of reusable generic views.
+
+
+
+
+
