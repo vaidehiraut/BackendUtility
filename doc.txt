@@ -118,4 +118,8 @@ There are 5 standard logging levels.
 5. CRITICAL: A serious error, indicating that the program itself may be unable to continue running.
 
 
+paramiko = creates SSH sessions to clients.
+rich = make output look nice and pretty.
+
+
 

@@ -1,6 +1,7 @@
 # from urllib import response
 # from django.shortcuts import render
 # from django.http import HttpResponse, JsonResponse
+import paramiko
 from .models import Sample
 from .serializers import SampleSerializer
 # from django.views.decorators.csrf import csrf_exempt
@@ -13,16 +14,51 @@ from rest_framework.views import APIView
 # import requests
 # import json
 import logging
+from paramiko import SSHClient, AutoAddPolicy
+from rich import print, pretty, inspect
+pretty.install()
 
 # Create your views here.
 
 
 class SampleAPIView(APIView):
+    def get(self, request):
+        samples = Sample.objects.all()
+        serializer= SampleSerializer(samples, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
-        logging.basicConfig(filename='test.txt', level=logging.DEBUG)
+
+        logging.basicConfig(filename='test.txt', level=logging.DEBUG) # store logged data into test.txt
+        logging.debug(request.data) # executes the operation
+
+        # ssh = paramiko.SSHClient() 
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # to avoid asking yes/no confirmation while
+                                                                  # connecting with your remote server at very
+                                                                  # first time
+                                                                  
+        # connecting with the remote server
+        # ssh.connect(hostname='', username='', password='', port=)
+
+        # for tranferring / downloading file, need to create from ssh client a SFTP object/connection
+        # sftp_client = ssh.open_sftp() # here we are opening SFTP connection with your remote server
+
+        # to download files from remote server
+        # sftp_client.get('source path', 'dest. path')
+
+        # changing directory and then download
+        # sftp_client.chdir("path from where you want to download")  
+        # sftp_client.get('file name', 'dest. path')
+
+        # to transfer a file 
+        # sftp_client.put("./test.txt", 'dest_path_of_remote_server')
+
+        # sftp_client.close()
+        # ssh.close()
+                                                            
 
         serializer = SampleSerializer(data=request.data)
-        logging.debug(request.data)
+        
 
         if serializer.is_valid():
             serializer.save()
