@@ -14,43 +14,56 @@ from rest_framework import mixins
 import requests
 import json
 from rest_framework_xml.renderers import XMLRenderer
-from .mixins import RequestLogViewMixin
+import logging
 
 # Create your views here.
 
 
-# Generic API views
-# class MyXMLRenderer(XMLRenderer):
-class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
-mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
+class SampleAPIView(APIView):
+    def post(self, request):
+        logging.basicConfig(filename='test.txt', level=logging.DEBUG)
+
+        serializer = SampleSerializer(data=request.data)
+        logging.debug(request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # def get(self, request, format=None):
-    #     response = requests.get("https://api.covid19api.com/countries").json()
-    #     print(response)
-    #     return render(request,'home.html',{'response':response})
+        #     response = requests.get("https://api.covid19api.com/countries").json()
+        #     print(response)
+        #     return render(request,'home.html',{'response':response})
 
-    serializer_class = SampleSerializer
-    queryset = Sample.objects.all()
 
-    lookup_field = 'id'
+# Generic API views
+# class MyXMLRenderer(XMLRenderer):
+# class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+# mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
 
-    def get(self, request, id = None):
+#     serializer_class = SampleSerializer
+#     queryset = Sample.objects.all()
 
-        if id:
-            return self.retrieve(request)
-        else:
+#     lookup_field = 'id'
+
+#     def get(self, request, id = None):
+
+#         if id:
+#             return self.retrieve(request)
+#         else:
             # print(request.data)
-            return self.list(request)
+    #         return self.list(request)
 
-    def post(self, request):
-        print(request.data)
-        return self.create(request)
+    # def post(self, request):
+    #     print(request.data)
+    #     return self.create(request)
 
-    def put(self, request, id=None):
-        return self.update(request, id)
+    # def put(self, request, id=None):
+    #     return self.update(request, id)
 
-    def delete(self, request, id):
-        return self.destroy(request, id)
+    # def delete(self, request, id):
+        # return self.destroy(request, id)
 
 
 

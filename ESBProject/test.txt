@@ -1,0 +1,4 @@
+DEBUG:root:{'title': 'Test15', 'email': 't13@gmail.com'}
+DEBUG:root:{'title': 'Test17', 'email': 't13@gmail.com'}
+DEBUG:root:{'title': 'Test18', 'email': 't13@gmail.com'}
+INFO:django.utils.autoreload:D:\Practice\Django-REST\BackendUtility-master\ESBProject\api\views.py changed, reloading.
