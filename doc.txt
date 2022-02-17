@@ -107,6 +107,15 @@ If the generic views don't suit the needs of your API, you can drop down to usin
 the mixins and base classes used by the generic views to compose your own set of reusable generic views.
 
 
+Logging levels:
+logging levels allow us to specify exactly what we want to log by seperating into different categories.
+There are 5 standard logging levels.
+1. DEBUG: Detailed information, typically of interest only when diagnosing problem.
+2. INFO: Confirmation that things are working as expected.
+3. WARNING: An indication that something unexpected happened or indicative of some problem in the near future (e.g. 'disk space low')
+            The software is still working as expected.
+4. ERROR: Due to a more serious problem, the software has not been able to perform some function.
+5. CRITICAL: A serious error, indicating that the program itself may be unable to continue running.
 
 
 
